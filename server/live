@@ -1,0 +1,15 @@
+<VirtualHost *:80>
+	DocumentRoot /var/data/reactiveraven/scripts/site/root/public
+	ServerName scripts.reactiveraven.co.uk
+
+	CustomLog /var/data/reactiveraven/scripts/site/logs/apache/access combined
+	LogLevel info
+	ErrorLog /var/data/reactiveraven/scripts/site/logs/apache/error
+	
+	SetEnv APPLICATION_ENV development
+
+	php_flag log_errors on
+	php_flag display_errors on
+	php_value error_reporting 32767
+	php_value error_log /var/data/reactiveraven/scripts/site/logs/php/error
+</VirtualHost>
