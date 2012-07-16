@@ -108,7 +108,7 @@ class Branch
       $vars[$key] = $this->getVar($key);
     }
     
-    $build = new Build($this->getPath() . "/checkout/", $vars, $this);
+    $build = new Build($this->getPath(), $vars, $this);
     if ($build->run())
     {
       echo "OK";

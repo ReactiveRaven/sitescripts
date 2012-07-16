@@ -44,6 +44,11 @@ class Build
     }
   }
   
+  private function getCheckoutDir()
+  {
+    return $this->root . "/checkout/";
+  }
+  
   private function replaceVariables($input)
   {
     foreach ($this->vars as $key => $val)
@@ -90,7 +95,7 @@ class Build
     mkdir($apache_config_path);
     
     // Link our config into place, or write our own
-    $expected_conf_location = $this->root . "/" . $this->apacheConfFile;
+    $expected_conf_location = $this->getCheckoutDir(). "/" . $this->apacheConfFile;
     $enabled_sites_name = str_replace("/", ".", $this->branch->getRepoString() . "_" . $this->branch->getName());
     if (is_file($expected_conf_location))
     {
@@ -101,7 +106,7 @@ class Build
       $contents = 
         array(
           "<VirtualHost *:80>",
-          "  DocumentRoot " . $this->root . "/checkout/",
+          "  DocumentRoot " . $this->getCheckoutDir() . "/",
           "  ServerName " . $this->branch->getName() . "." . $this->getDomainName(),
           "  ",
           "  CustomLog " . $this->root . "/logs/apache.access combined",
@@ -145,7 +150,7 @@ class Build
   {
     foreach ($this->configFiles as $oldFile => $newFile)
     {
-      if (file_exists($this->root . $oldfile))
+      if (file_exists($this->getCheckoutDir() . $oldFile))
       {
         file_put_contents(
           $newFile, 
