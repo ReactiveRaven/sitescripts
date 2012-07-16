@@ -11,8 +11,8 @@
         },
         "vvps-047130.dailyvps.co.uk": {
           "vars": {
-            "localuser": "_www",
-            "localgroup": "_www",
+            "localuser": "www-data",
+            "localgroup": "www-data",
             "database_host": "localhost",
             "database_port": ""
           },
@@ -41,7 +41,6 @@
               "branches": {
                 "master": {
                   "vars": {
-                    "localuser": "godfred7",
                     "database_name": "rr_site",
                     "database_user":"reactiveraven",
                     "database_password": "DVNO4clPigcdmtgs",
