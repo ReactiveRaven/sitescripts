@@ -100,7 +100,7 @@ class Branch
     
     chdir($this->getPath());
     shell_exec("git clone git@github.com:" . $this->repository->getRepoString() . ".git -b " . $this->name . " ./checkout");
-    shell_exec("chown -R " . $this->getVar("localuser") . ":" . $this->getVar("localgroup") . " " . $this->getPath() . "/checkout/\n");
+    shell_exec("chown -R " . $this->getVar("localuser") . ":" . $this->getVar("localgroup") . " " . $this->getPath() . "/\n");
     
     $vars = array();
     foreach ($this->getVars() as $key)

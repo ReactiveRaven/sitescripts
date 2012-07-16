@@ -15,6 +15,8 @@ class Build
   
   private $branch = null;
   
+  private $domainName = null;
+  
   public function __construct($root, $vars, Branch $branch)
   {
     $this->branch = $branch;
@@ -58,6 +60,17 @@ class Build
     $this->testApacheConfig();
   }
   
+  public function getDomainName()
+  {
+    if (!$this->domainName)
+    {
+      $bits = explode("/", $this->branch->getRepoString());
+      $this->domainName = $bits[count($bits) - 1];
+    }
+    
+    return $this->domainName;
+  }
+  
   private function testApacheConfig()
   {
     // Make sure the apache sites-enabled directory even exists
@@ -71,9 +84,9 @@ class Build
     $apache_config_path_backup = $apache_config_path . "_rraven_automation_server";
     if (file_exists($apache_config_path_backup))
     {
-      unlink($apache_config_path_backup);
+      throw new Exception("Apache sites-available backup folder already exists. Manually decide on an acceptable sites-enabled folder, remove the rraven_automation_server backup copy, and try again.");
     }
-    rename($apache_config_path, $apache_config_path_backup);    
+    rename($apache_config_path, $apache_config_path_backup);
     mkdir($apache_config_path);
     
     // Link our config into place, or write our own
@@ -85,15 +98,37 @@ class Build
     }
     else
     {
+      $contents = 
+        array(
+          "<VirtualHost *:80>",
+          "  DocumentRoot " . $this->root . "/checkout/",
+          "  ServerName " . $this->branch->getName() . "." . $this->getDomainName(),
+          "  ",
+          "  CustomLog " . $this->root . "/logs/apache.access combined",
+          "  LogLevel info",
+          "  ErrorLog " . $this->root . "/logs/apache.error",
+          "  ",
+          "  php_flag log_errors on",
+          "  php_flag display_errors on",
+          "  php_value error_reporting 32767",
+          "  php_value error_log " . $this->root . "/logs/php.error",
+          "</VirtualHost>"
+        )
+      ;
+      
+      file_put_contents($expected_conf_location, implode("\n", $contents));
       // TODO: What about generating a basic config file?
-      throw new \Exception("Cannot find apache config file for '" . $this->branch->getRepoString() . "_" . $this->branch->getName() . "'");
+      //throw new \Exception("Cannot find apache config file for '" . $this->branch->getRepoString() . "_" . $this->branch->getName() . "'");
     }
     
     // Test the config
     $config_ok = (shell_exec("apache2ctl configtest > /dev/null 2>&1 && echo -n OK") == "OK");
     
     // If the config is ok, copy it into the backup folder
-    copy($apache_config_path . "/" . $enabled_sites_name, $apache_config_path_backup . "/" . $enabled_sites_name);
+    if ($config_ok)
+    {
+      copy($apache_config_path . "/" . $enabled_sites_name, $apache_config_path_backup . "/" . $enabled_sites_name);
+    }
     
     // Move the backup folder back into place, deleting the temp one
     unlink($apache_config_path);
