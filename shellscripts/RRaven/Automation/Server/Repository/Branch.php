@@ -102,7 +102,13 @@ class Branch
     shell_exec("git clone git@github.com:" . $this->repository->getRepoString() . ".git -b " . $this->name . " ./checkout");
     shell_exec("chown -R " . $this->getVar("localuser") . ":" . $this->getVar("localgroup") . " " . $this->getPath() . "/checkout/\n");
     
-    $build = new Build($this);
+    $vars = array();
+    foreach ($this->getVars() as $key)
+    {
+      $vars[$key] = $this->getVar($key);
+    }
+    
+    $build = new Build($this->getPath() . "/checkout/", $vars, $this);
     if ($build->run())
     {
       echo "OK";
