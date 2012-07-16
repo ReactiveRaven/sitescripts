@@ -85,7 +85,7 @@ class SettingsFile
     }
     foreach ($defaults as $key => $val)
     {
-      if (isset($specifics[$key]) && is_array($var))
+      if (isset($specifics[$key]) && is_array($val))
       {
         $specifics[$key] = self::mergeSettings($specifics[$key], $val);
       }
