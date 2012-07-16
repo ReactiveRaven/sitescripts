@@ -136,9 +136,9 @@ class Build
     }
     
     // Move the backup folder back into place, deleting the temp one
-    if (count($apache_config_path) < 10)
+    if (strlen($apache_config_path) < 10)
     {
-      throw new \Exception("Sanity check the apache config path please! Its only " . count($apache_config_path) . " characters long and I'm scared. '" . $apache_config_path . "'");
+      throw new \Exception("Sanity check the apache config path please! Its only " . strlen($apache_config_path) . " characters long and I'm scared. '" . $apache_config_path . "'");
     }
     $files = new RecursiveIteratorIterator(
       new RecursiveDirectoryIterator($apache_config_path), 
