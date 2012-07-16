@@ -136,7 +136,21 @@ class Build
     }
     
     // Move the backup folder back into place, deleting the temp one
-    unlink($apache_config_path);
+    if (count($apache_config_path) < 10)
+    {
+      throw new \Exception("Sanity check the apache config path please! Its only " . count($apache_config_path) . " characters long and I'm scared. '" . $apache_config_path . "'");
+    }
+    $files = new RecursiveIteratorIterator(
+      new RecursiveDirectoryIterator($apache_config_path), 
+      RecursiveIteratorIterator::CHILD_FIRST
+    );
+    foreach($files as $file){
+      if ($file->isDir()){
+        rmdir($file->getRealPath());
+      } else {
+        unlink($file->getRealPath());
+      }
+    }
     rename($apache_config_path_backup, $apache_config_path);
     
     // If the config was ok, restart the server.
