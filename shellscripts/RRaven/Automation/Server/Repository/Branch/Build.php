@@ -116,7 +116,7 @@ class Build
         )
       ;
       
-      file_put_contents($expected_conf_location, implode("\n", $contents));
+      file_put_contents($apache_config_path . "/" . $enabled_sites_name, implode("\n", $contents));
       // TODO: What about generating a basic config file?
       //throw new \Exception("Cannot find apache config file for '" . $this->branch->getRepoString() . "_" . $this->branch->getName() . "'");
     }
