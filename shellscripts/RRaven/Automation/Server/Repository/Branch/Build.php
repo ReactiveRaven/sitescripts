@@ -140,9 +140,9 @@ class Build
     {
       throw new \Exception("Sanity check the apache config path please! Its only " . strlen($apache_config_path) . " characters long and I'm scared. '" . $apache_config_path . "'");
     }
-    $files = new RecursiveIteratorIterator(
-      new RecursiveDirectoryIterator($apache_config_path), 
-      RecursiveIteratorIterator::CHILD_FIRST
+    $files = new \RecursiveIteratorIterator(
+      new \RecursiveDirectoryIterator($apache_config_path), 
+      \RecursiveIteratorIterator::CHILD_FIRST
     );
     foreach($files as $file){
       if ($file->isDir()){
