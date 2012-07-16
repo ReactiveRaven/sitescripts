@@ -1,0 +1,124 @@
+<?php
+
+namespace RRaven\Automation\Server\Repository\Branch;
+
+use RRaven\Automation\Server\Repository\Branch;
+use RRaven\Automation\Server;
+
+class Build
+{
+  private $root = null;
+  private $vars = array();
+  private $configFiles = array();
+  private $eventScripts = array();
+  private $apacheConfFile = null;
+  
+  private $branch = null;
+  
+  public function __construct($root, $vars, Branch $branch)
+  {
+    $this->branch = $branch;
+    $this->root = $root;
+    $this->vars = $vars;
+    if (file_exists($root . "/build.json"))
+    {
+      $settings = json_decode(file_get_contents($root . "/build.json"), true);
+      if (isset($settings["rraven"]) && isset($settings["rraven"]["server"]))
+      {
+        $settings = $settings["rraven"]["server"];
+        if (isset($settings["configfiles"]))
+        {
+          $this->configFiles = $settings["configfiles"];
+        }
+        if (isset($settings["hooks"]))
+        {
+          $this->eventScripts = $settings["hooks"];
+        }
+        if (isset($settings["apacheConfFile"]))
+        {
+          $this->apacheConfFile = $this->replaceVariables($settings["apacheConfFile"]);
+        }
+      }
+    }
+  }
+  
+  private function replaceVariables($input)
+  {
+    foreach ($this->vars as $key => $val)
+    {
+      $input = str_replace("%%" . $key . "%%", $val, $input);
+    }
+    
+    return $input;
+  }
+  
+  public function run()
+  {
+    $this->buildConfigFiles();
+    $this->testApacheConfig();
+  }
+  
+  private function testApacheConfig()
+  {
+    // Make sure the apache sites-enabled directory even exists
+    $apache_config_path = "/etc/apache2/sites-enabled";
+    if (!file_exists($apache_config_path))
+    {
+      throw new \Exception("Cannot find apache enabled-sites directory");
+    }
+    
+    // Keep a backup of correct stuff, deleting the old backup if it got left
+    $apache_config_path_backup = $apache_config_path . "_rraven_automation_server";
+    if (file_exists($apache_config_path_backup))
+    {
+      unlink($apache_config_path_backup);
+    }
+    rename($apache_config_path, $apache_config_path_backup);    
+    mkdir($apache_config_path);
+    
+    // Link our config into place, or write our own
+    $expected_conf_location = $this->root . "/" . $this->apacheConfFile;
+    $enabled_sites_name = str_replace("/", ".", $this->branch->getRepoString() . "_" . $this->branch->getName());
+    if (is_file($expected_conf_location))
+    {
+      link($expected_conf_location, $apache_config_path . "/" . $enabled_sites_name);
+    }
+    else
+    {
+      // TODO: What about generating a basic config file?
+      throw new \Exception("Cannot find apache config file for '" . $this->branch->getRepoString() . "_" . $this->branch->getName() . "'");
+    }
+    
+    // Test the config
+    $config_ok = (shell_exec("apache2ctl configtest > /dev/null 2>&1 && echo -n OK") == "OK");
+    
+    // If the config is ok, copy it into the backup folder
+    copy($apache_config_path . "/" . $enabled_sites_name, $apache_config_path_backup . "/" . $enabled_sites_name);
+    
+    // Move the backup folder back into place, deleting the temp one
+    unlink($apache_config_path);
+    rename($apache_config_path_backup, $apache_config_path);
+    
+    // If the config was ok, restart the server.
+    if ($config_ok)
+    {
+      shell_exec("apache2ctl graceful");
+    }
+  }
+  
+  private function buildConfigFiles()
+  {
+    foreach ($this->configFiles as $oldFile => $newFile)
+    {
+      if (file_exists($this->root . $oldfile))
+      {
+        file_put_contents(
+          $newFile, 
+          $this->replaceVariables(
+            file_get_contents($oldFile)
+          )
+        );
+      }
+    }
+  }
+}

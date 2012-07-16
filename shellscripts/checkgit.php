@@ -12,13 +12,18 @@ while (!file_exists("build.json") && count(explode("/", getcwd())) > 2)
 if (file_exists("build.json"))
 {
 	$json = json_decode(file_get_contents("build.json"), true);
-	if (isset($json["rraven"]) && isset($json["rraven"]["build"]) && isset($json["rraven"]["build"][$action]))
+	if (
+    isset($json["rraven"]) 
+    && isset($json["rraven"]["server"]) 
+    && isset($json["rraven"]["server"]["hooks"]) 
+    && isset($json["rraven"]["server"]["hooks"][$action])
+  )
 	{
-		if (!is_array($json["rraven"]["build"][$action]))
+		if (!is_array($json["rraven"]["server"]["hooks"][$action]))
 		{
-			$json["rraven"]["build"][$action] = array($json["rraven"]["build"][$action]);
+			$json["rraven"]["server"]["hooks"][$action] = array($json["rraven"]["server"]["hooks"][$action]);
 		}
-		foreach ($json["rraven"]["build"][$action] as $callback)
+		foreach ($json["rraven"]["server"]["hooks"][$action] as $callback)
 		{
 			echo "Calling '" . $callback . "'\n";
 			shell_exec($callback);
