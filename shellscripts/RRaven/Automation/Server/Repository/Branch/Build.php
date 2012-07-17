@@ -76,7 +76,7 @@ class Build
     if (isset($this->eventScripts["build"]))
     {
       chdir($this->getCheckoutDir());
-      shell_exec("su " . $this->var["localuser"] . " -c \"" . $this->getCheckoutDir() . "/" . $this->eventScripts["build"] . "\"");
+      shell_exec("su " . $this->vars["localuser"] . " -c \"" . $this->getCheckoutDir() . "/" . $this->eventScripts["build"] . "\"");
     }
   }
   
