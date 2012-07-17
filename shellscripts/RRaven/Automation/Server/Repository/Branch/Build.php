@@ -89,7 +89,7 @@ class Build
     $apache_config_path_backup = rtrim($apache_config_path, "/\\") . "_rraven_automation_server";
     if (file_exists($apache_config_path_backup))
     {
-      throw new Exception("Apache sites-available backup folder already exists. Manually decide on an acceptable sites-enabled folder, remove the rraven_automation_server backup copy, and try again.");
+      throw new \Exception("Apache sites-available backup folder already exists. Manually decide on an acceptable sites-enabled folder, remove the rraven_automation_server backup copy, and try again.");
     }
     rename($apache_config_path, $apache_config_path_backup);
     mkdir($apache_config_path);
@@ -140,15 +140,19 @@ class Build
     {
       throw new \Exception("Sanity check the apache config path please! Its only " . strlen($apache_config_path) . " characters long and I'm scared. '" . $apache_config_path . "'");
     }
+    
     $files = new \RecursiveIteratorIterator(
       new \RecursiveDirectoryIterator($apache_config_path), 
       \RecursiveIteratorIterator::CHILD_FIRST
     );
     foreach($files as $file){
-      if ($file->isDir()){
-        rmdir($file->getRealPath());
-      } else {
-        unlink($file->getRealPath());
+      if (!preg_match("/\/[.]+$/", $file))
+      {
+        if ($file->isDir()){
+          rmdir($file->getRealPath());
+        } else {
+          unlink($file->getRealPath());
+        }
       }
     }
     rename($apache_config_path_backup, $apache_config_path);
