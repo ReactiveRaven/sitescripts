@@ -72,6 +72,8 @@ class Build
   
   public function run()
   {
+    chdir($this->root);
+    shell_exec("chown -R " . $this->getVar("localuser") . ":" . $this->getVar("localgroup") . " ./");
     $this->buildConfigFiles();
     $this->testApacheConfig();
     $this->runBuildScripts();

@@ -136,7 +136,6 @@ class Branch
     chdir($this->getPath() . "/checkout");
     shell_exec("git submodule update --init");
     chdir($this->getPath());
-    shell_exec("chown -R " . $this->getVar("localuser") . ":" . $this->getVar("localgroup") . " " . $this->getPath() . "/\n");
     
     
     
