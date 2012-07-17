@@ -86,7 +86,7 @@ class Build
     }
     
     // Keep a backup of correct stuff, deleting the old backup if it got left
-    $apache_config_path_backup = $apache_config_path . "_rraven_automation_server";
+    $apache_config_path_backup = rtrim($apache_config_path, "/\\") . "_rraven_automation_server";
     if (file_exists($apache_config_path_backup))
     {
       throw new Exception("Apache sites-available backup folder already exists. Manually decide on an acceptable sites-enabled folder, remove the rraven_automation_server backup copy, and try again.");
