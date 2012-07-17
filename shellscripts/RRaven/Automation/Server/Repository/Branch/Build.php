@@ -24,7 +24,7 @@ class Build
     $this->vars = $vars;
     if (file_exists($this->getCheckoutDir() . "/build.json"))
     {
-      $settings = json_decode(file_get_contents($root . "/build.json"), true);
+      $settings = json_decode(file_get_contents($this->getCheckoutDir() . "/build.json"), true);
       if (isset($settings["rraven"]) && isset($settings["rraven"]["server"]))
       {
         $settings = $settings["rraven"]["server"];
