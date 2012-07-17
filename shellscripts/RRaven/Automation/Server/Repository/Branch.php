@@ -134,6 +134,7 @@ class Branch
     chdir($this->getPath());
     shell_exec("git clone git@github.com:" . $this->repository->getRepoString() . ".git -b " . $this->name . " ./checkout");
     chdir($this->getPath() . "/checkout");
+    shell_exec("git pull origin " . $this->name);
     shell_exec("git submodule update --init");
     chdir($this->getPath());
     
