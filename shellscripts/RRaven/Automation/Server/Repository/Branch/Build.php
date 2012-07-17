@@ -63,6 +63,7 @@ class Build
   {
     $this->buildConfigFiles();
     $this->testApacheConfig();
+    return true;
   }
   
   public function getDomainName()
@@ -133,6 +134,10 @@ class Build
     // If the config is ok, copy it into the backup folder
     if ($config_ok)
     {
+      if (file_exists($apache_config_path_backup . "/" . $enabled_sites_name))
+      {
+        unlink($apache_config_path_backup . "/" . $enabled_sites_name);
+      }
       copy($apache_config_path . "/" . $enabled_sites_name, $apache_config_path_backup . "/" . $enabled_sites_name);
     }
     
