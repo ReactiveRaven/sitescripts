@@ -11,6 +11,11 @@ class SettingsFile
   private $servers = array();
   private $globalSettings = null;
   
+  public static function manufacture($filename)
+  {
+    return new SettingsFile($filename);
+  }
+  
   public function __construct($filename)
   {
     if (!is_file($filename))

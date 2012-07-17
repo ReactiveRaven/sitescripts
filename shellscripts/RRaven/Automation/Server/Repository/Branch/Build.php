@@ -17,6 +17,13 @@ class Build
   
   private $domainName = null;
   
+  /**
+   * Constructs a new Build to run or examine
+   *
+   * @param string $root folder of site (not necessarily of checkout)
+   * @param string[] $vars to use in build
+   * @param Branch $branch the build is from
+   */
   public function __construct($root, $vars, Branch $branch)
   {
     $this->branch = $branch;

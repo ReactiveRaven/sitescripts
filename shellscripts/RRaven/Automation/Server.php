@@ -137,6 +137,14 @@ class Server
     }
   }
   
+  public function update()
+  {
+    foreach ($this->getRepos() as $repo /* @var $repo Repository */)
+    {
+      $repo->update();
+    }
+  }
+  
   public function install()
   {
     if (!file_exists($this->getCheckoutPath()))

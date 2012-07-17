@@ -4,7 +4,7 @@ namespace RRaven\Automation\Server\Repository;
 
 use RRaven\Automation\Server;
 use RRaven\Automation\Server\Repository;
-use RRaven\Automation\Server\Repository\Branch\Build;
+use RRaven\Automation\Server\Repository\Branch\Build as BranchBuild;
 
 class Branch
 {
@@ -88,6 +88,34 @@ class Branch
     return file_exits($this->getPath() . "/checkout");
   }
   
+  public function update()
+  {
+    chdir($this->getPath() . "/checkout");
+    shell_exec("git fetch");
+    shell_exec("git pull origin " . $this->name);
+    shell_exec("git submodule update --init");
+    
+    $build = new BranchBuild($this->getPath(), $this->buildVarsArray(), $this);
+    if ($build->run())
+    {
+      echo "OK";
+    }
+    else
+    {
+      throw new \Exception("Could not complete build of branch '" . $this->name . "'");
+    }
+  }
+  
+  private function buildVarsArray()
+  {
+    $vars = array();
+    foreach ($this->getVars() as $key)
+    {
+      $vars[$key] = $this->getVar($key);
+    }
+    return $vars;
+  }
+  
   public function install()
   {
     foreach (array("", "/logs", "/checkout", "/vars") as $path)
@@ -110,13 +138,9 @@ class Branch
     chdir($this->getPath());
     shell_exec("chown -R " . $this->getVar("localuser") . ":" . $this->getVar("localgroup") . " " . $this->getPath() . "/\n");
     
-    $vars = array();
-    foreach ($this->getVars() as $key)
-    {
-      $vars[$key] = $this->getVar($key);
-    }
     
-    $build = new Build($this->getPath(), $vars, $this);
+    
+    $build = new BranchBuild($this->getPath(), $this->buildVarsArray(), $this);
     if ($build->run())
     {
       echo "OK";

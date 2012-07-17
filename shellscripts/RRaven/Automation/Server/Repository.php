@@ -128,6 +128,14 @@ class Repository
     return $this->server->createDirectory($path, $mode, $user, $group);
   }
   
+  public function update()
+  {
+    foreach ($this->getBranches() as $branch /* @var $branch Branch */)
+    {
+      $branch->update();
+    }
+  }
+  
   public function install()
   {
     if (!file_exists($this->getPath()))
