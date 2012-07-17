@@ -177,9 +177,9 @@ class Build
       if (file_exists($this->getCheckoutDir() . $oldFile))
       {
         file_put_contents(
-          $newFile, 
+          $this->getCheckoutDir() . "/" . $newFile, 
           $this->replaceVariables(
-            file_get_contents($oldFile)
+            file_get_contents($this->getCheckoutDir() . "/" . $oldFile)
           )
         );
       }
