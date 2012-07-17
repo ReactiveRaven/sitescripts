@@ -6,7 +6,7 @@
 int main()
 {
    setuid( 0 );
-   system( "./checkgit.sh" );
+   system( "/usr/bin/php install.php" );
 
    return 0;
 }

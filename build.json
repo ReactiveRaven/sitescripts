@@ -1,0 +1,12 @@
+{
+  "rraven": {
+    "server": {
+      "apacheConfFile": "server/%%branch%%.conf",
+      "hooks": {
+      },
+      "configfiles": {
+        "server/master_default.conf": "server/master.conf"
+      }
+    }
+  }
+}
