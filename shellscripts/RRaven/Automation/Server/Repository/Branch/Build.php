@@ -79,7 +79,7 @@ class Build
   private function testApacheConfig()
   {
     // Make sure the apache sites-enabled directory even exists
-    $apache_config_path = "/etc/apache2/sites-enabled";
+    $apache_config_path = "/etc/apache2/sites-enabled/";
     if (!file_exists($apache_config_path))
     {
       throw new \Exception("Cannot find apache enabled-sites directory");
