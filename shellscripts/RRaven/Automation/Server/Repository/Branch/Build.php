@@ -93,6 +93,7 @@ class Build
     }
     rename($apache_config_path, $apache_config_path_backup);
     mkdir($apache_config_path);
+    link($apache_config_path."/../sites-available/default", $apache_config_path."/000-default");
     
     // Link our config into place, or write our own
     $expected_conf_location = $this->getCheckoutDir(). "/" . $this->apacheConfFile;
