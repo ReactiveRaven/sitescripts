@@ -22,7 +22,7 @@ class Build
     $this->branch = $branch;
     $this->root = $root;
     $this->vars = $vars;
-    if (file_exists($root . "/build.json"))
+    if (file_exists($this->getCheckoutDir() . "/build.json"))
     {
       $settings = json_decode(file_get_contents($root . "/build.json"), true);
       if (isset($settings["rraven"]) && isset($settings["rraven"]["server"]))
