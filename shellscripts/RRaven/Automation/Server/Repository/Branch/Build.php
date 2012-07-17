@@ -22,6 +22,10 @@ class Build
     $this->branch = $branch;
     $this->root = $root;
     $this->vars = $vars;
+    if (!isset($this->vars["localroot"]))
+    {
+      $this->vars["localroot"] = $this->getCheckoutDir();
+    }
     if (file_exists($this->getCheckoutDir() . "/build.json"))
     {
       $settings = json_decode(file_get_contents($this->getCheckoutDir() . "/build.json"), true);
