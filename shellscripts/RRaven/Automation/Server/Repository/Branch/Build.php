@@ -67,7 +67,17 @@ class Build
   {
     $this->buildConfigFiles();
     $this->testApacheConfig();
+    $this->runBuildScripts();
     return true;
+  }
+  
+  private function runBuildScripts()
+  {
+    if (isset($this->eventScripts["build"]))
+    {
+      chdir($this->getCheckoutDir());
+      shell_exec("su " . $this->var["localuser"] . " -c \"" . $this->getCheckoutDir() . "/" . $this->eventScripts["build"] . "\"");
+    }
   }
   
   public function getDomainName()
