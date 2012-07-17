@@ -19,28 +19,6 @@
           "repos": {
             "ReactiveRaven/reactiveraven.co.uk": {
               "branches": {
-                "staging": {
-                  "vars": {
-                    "database_name": "rr_site",
-                    "database_user":"reactiveraven_staging",
-                    "database_password": "3c3c59ae666b793f1dd23519c8a4d68d58025ea8",
-                    "symfony_secret": "b3010499cc3841dc3f7d83f7d5b764663"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "vvps-047130.dailyvps.co.uk_DISABLED": {
-          "vars": {
-            "localuser": "www-data",
-            "localgroup": "www-data",
-            "database_host": "localhost",
-            "database_port": ""
-          },
-          "repos": {
-            "ReactiveRaven/reactiveraven.co.uk": {
-              "branches": {
                 "master": {
                   "vars": {
                     "database_name": "rr_site",
