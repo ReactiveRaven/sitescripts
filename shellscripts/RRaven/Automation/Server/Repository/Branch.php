@@ -27,6 +27,11 @@ class Branch
     {
       $this->vars = $this->settings["vars"];
     }
+    
+    if (!isset($this->vars["branch"]))
+    {
+      $this->vars["branch"] = $this->name;
+    }
   }
   
   /**
@@ -100,6 +105,9 @@ class Branch
     
     chdir($this->getPath());
     shell_exec("git clone git@github.com:" . $this->repository->getRepoString() . ".git -b " . $this->name . " ./checkout");
+    chdir($this->getPath() . "/checkout");
+    shell_exec("git submodule update --init");
+    chdir($this->getPath());
     shell_exec("chown -R " . $this->getVar("localuser") . ":" . $this->getVar("localgroup") . " " . $this->getPath() . "/\n");
     
     $vars = array();
