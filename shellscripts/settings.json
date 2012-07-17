@@ -19,12 +19,62 @@
           "repos": {
             "ReactiveRaven/reactiveraven.co.uk": {
               "branches": {
+                "staging": {
+                  "vars": {
+                    "database_name": "rr_site",
+                    "database_user":"reactiveraven_staging",
+                    "database_password": "3c3c59ae666b793f1dd23519c8a4d68d58025ea8",
+                    "symfony_secret": "b3010499cc3841dc3f7d83f7d5b764663"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "vvps-047130.dailyvps.co.uk_DISABLED": {
+          "vars": {
+            "localuser": "www-data",
+            "localgroup": "www-data",
+            "database_host": "localhost",
+            "database_port": ""
+          },
+          "repos": {
+            "ReactiveRaven/reactiveraven.co.uk": {
+              "branches": {
                 "master": {
                   "vars": {
                     "database_name": "rr_site",
                     "database_user":"reactiveraven",
                     "database_password": "DVNO4clPigcdmtgs",
                     "symfony_secret": "b3010499cc3841dc3f7d83f7d5b764663"
+                  }
+                },
+                "staging": {
+                  "vars": {
+                    "database_name": "rr_site",
+                    "database_user":"reactiveraven_staging",
+                    "database_password": "3c3c59ae666b793f1dd23519c8a4d68d58025ea8",
+                    "symfony_secret": "b3010499cc3841dc3f7d83f7d5b764663"
+                  }
+                }
+              }
+            },
+            "ReactiveRaven/gitpanel.com": {
+              "branches": {
+                "master": {
+                  "vars": {
+                    "database_name": "gitpanel",
+                    "database_user": "gitpanel",
+                    "database_password": "45acad6fa2204b6183d980724f5ed1a354845f41",
+                    "symfony_secret": "9d6dc8215b9565462eb270548e0c12f3165ad3fd"
+                  }
+                },
+                "staging": {
+                  "vars": {
+                    "database_name": "gitpanel_staging",
+                    "database_user": "gitpanel_staging",
+                    "database_password": "c1da08cd5888ab137601646f24d77baeb4a12306",
+                    "symfony_secret": "1e863c9a44fdfd624eb33c7e83d745541a038729"
                   }
                 }
               }
