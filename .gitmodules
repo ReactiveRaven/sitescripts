@@ -1,0 +1,3 @@
+[submodule "shellscripts/settings"]
+	path = shellscripts/settings
+	url = git@github.com:ReactiveRaven/settings.git
