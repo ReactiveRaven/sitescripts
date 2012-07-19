@@ -70,6 +70,15 @@ class Build
     return $input;
   }
   
+  public function install()
+  {
+    chdir($this->root);
+    shell_exec("chown -R " . $this->vars["localuser"] . ":" . $this->vars["localgroup"] . " ./");
+    $this->buildConfigFiles();
+    $this->runInstallScripts();
+    return true;
+  }
+  
   public function run()
   {
     chdir($this->root);
@@ -82,10 +91,20 @@ class Build
   
   private function runBuildScripts()
   {
-    if (isset($this->eventScripts["build"]))
+    $this->runScripts("build");
+  }
+  
+  private function runInstallScripts()
+  {
+    $this->runScripts("install");
+  }
+  
+  private function runScripts($key)
+  {
+    if (isset($this->eventScripts[$key]))
     {
       chdir($this->getCheckoutDir());
-      shell_exec("su " . $this->vars["localuser"] . " -c \"" . $this->getCheckoutDir() . "/" . $this->eventScripts["build"] . "\"");
+      shell_exec("su " . $this->vars["localuser"] . " -c \"" . $this->getCheckoutDir() . "/" . $this->eventScripts[$key] . "\"");
     }
   }
   

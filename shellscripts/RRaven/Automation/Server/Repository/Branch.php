@@ -102,7 +102,7 @@ class Branch
     }
     else
     {
-      throw new \Exception("Could not complete build of branch '" . $this->name . "'");
+      throw new \Exception("Could not complete update of branch '" . $this->name . "'");
     }
   }
   
@@ -141,14 +141,16 @@ class Branch
     
     
     $build = new BranchBuild($this->getPath(), $this->buildVarsArray(), $this);
-    if ($build->run())
+    if ($build->install())
     {
       echo "OK";
     }
     else
     {
-      throw new \Exception("Could not complete build of branch '" . $this->name . "'");
+      throw new \Exception("Could not complete install of branch '" . $this->name . "'");
     }
+    
+    return $this->update();
   }
   
   public function getRepoString()
