@@ -86,6 +86,8 @@ class Build
     $this->runInstallScripts();
     echo "OK\n";
     
+    echo "        OK\n";
+    
     return true;
   }
   
@@ -109,6 +111,9 @@ class Build
     echo "            Running scripts...";
     $this->runBuildScripts();
     echo "OK\n";
+    
+    echo "        OK\n";
+    
     return true;
   }
   

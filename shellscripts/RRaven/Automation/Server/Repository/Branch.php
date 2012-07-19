@@ -113,7 +113,7 @@ class Branch
       throw new \Exception("Could not complete update of branch '" . $this->name . "'");
     }
     
-    echo "    OK\n\n";
+    echo "    OK\nOK\n\n";
   }
   
   private function buildVarsArray()
@@ -128,10 +128,13 @@ class Branch
   
   public function install()
   {
+    echo $this->repository->getRepoString() . ":" . $this->name . ": Installing\n";
+    
     foreach (array("", "/logs", "/checkout", "/vars") as $path)
     {
       if (!file_exists($this->getPath() . $path))
       {
+        echo "    Creating '" .  $path . "'\n";
         $this->createDirectory(
           $this->getPath() . $path, 
           0776, 
@@ -142,10 +145,9 @@ class Branch
     }
     
     chdir($this->getPath());
-    echo $this->repository->getRepoString() . ":" . $this->name . ": Installing\n";
     
     echo "    Cloning...";
-    shell_exec("git clone git@github.com:" . $this->repository->getRepoString() . ".git -b " . $this->name . " ./checkout >dev/null 2>&1");
+    shell_exec("git clone git@github.com:" . $this->repository->getRepoString() . ".git -b " . $this->name . " ./checkout >/dev/null 2>&1");
     echo "OK\n";
     
     chdir($this->getPath() . "/checkout");
@@ -167,7 +169,7 @@ class Branch
     {
       throw new \Exception("Could not complete install of branch '" . $this->name . "'");
     }
-    echo "    OK\n\n";
+    echo "    OK\nOK\n\n";
     
     return $this->update();
   }
