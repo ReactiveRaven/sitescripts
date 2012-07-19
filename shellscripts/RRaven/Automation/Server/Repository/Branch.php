@@ -90,20 +90,30 @@ class Branch
   
   public function update()
   {
-    chdir($this->getPath() . "/checkout");
-    shell_exec("git fetch");
-    shell_exec("git pull origin " . $this->name);
-    shell_exec("git submodule update --init");
+    echo $this->repository->getRepoString() . ":" . $this->name . ": Updating\n";
     
+    chdir($this->getPath() . "/checkout");
+    
+    echo "    Fetching...";
+    shell_exec("git fetch > /dev/null 2>&1");
+    echo "OK\n";
+    
+    echo "    Pulling branch...";
+    shell_exec("git pull origin " . $this->name . " >/dev/null 2>&1");
+    echo "OK\n";
+    
+    echo "    Submodules...";
+    shell_exec("git submodule update --init >/dev/null 2>&1");
+    echo "OK\n";
+    
+    echo "    Update Build...\n";
     $build = new BranchBuild($this->getPath(), $this->buildVarsArray(), $this);
-    if ($build->run())
-    {
-      echo "OK";
-    }
-    else
+    if (!$build->run())
     {
       throw new \Exception("Could not complete update of branch '" . $this->name . "'");
     }
+    
+    echo "    OK\n\n";
   }
   
   private function buildVarsArray()
@@ -132,23 +142,32 @@ class Branch
     }
     
     chdir($this->getPath());
-    shell_exec("git clone git@github.com:" . $this->repository->getRepoString() . ".git -b " . $this->name . " ./checkout");
+    echo $this->repository->getRepoString() . ":" . $this->name . ": Installing\n";
+    
+    echo "    Cloning...";
+    shell_exec("git clone git@github.com:" . $this->repository->getRepoString() . ".git -b " . $this->name . " ./checkout >dev/null 2>&1");
+    echo "OK\n";
+    
     chdir($this->getPath() . "/checkout");
-    shell_exec("git pull origin " . $this->name);
-    shell_exec("git submodule update --init");
+   
+    echo "    Pulling branch...";
+    shell_exec("git pull origin " . $this->name . " >/dev/null 2>&1");
+    echo "OK\n";
+    
+    echo "    Submodules...";
+    shell_exec("git submodule update --init >/dev/null 2>&1");
+    echo "OK\n";
+    
     chdir($this->getPath());
     
     
-    
+    echo "    Install Build...\n";
     $build = new BranchBuild($this->getPath(), $this->buildVarsArray(), $this);
-    if ($build->install())
-    {
-      echo "OK";
-    }
-    else
+    if (!$build->install())
     {
       throw new \Exception("Could not complete install of branch '" . $this->name . "'");
     }
+    echo "    OK\n\n";
     
     return $this->update();
   }

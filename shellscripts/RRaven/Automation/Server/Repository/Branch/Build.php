@@ -72,20 +72,43 @@ class Build
   
   public function install()
   {
+    echo "        Building (Install)...\n";
     chdir($this->root);
+    echo "            Resetting permissions...";
     shell_exec("chown -R " . $this->vars["localuser"] . ":" . $this->vars["localgroup"] . " ./");
+    echo "OK\n";
+    
+    echo "            Building config files...";
     $this->buildConfigFiles();
+    echo "OK\n";
+    
+    echo "            Running scripts (Install)...";
     $this->runInstallScripts();
+    echo "OK\n";
+    
     return true;
   }
   
   public function run()
   {
+    echo "        Building...\n";
     chdir($this->root);
+    
+    echo "            Resetting permissions...";
     shell_exec("chown -R " . $this->vars["localuser"] . ":" . $this->vars["localgroup"] . " ./");
+    echo "OK\n";
+    
+    echo "            Building config files...";
     $this->buildConfigFiles();
+    echo "OK\n";
+    
+    echo "            Testing apache config...";
     $this->testApacheConfig();
+    echo "OK\n";
+    
+    echo "            Running scripts...";
     $this->runBuildScripts();
+    echo "OK\n";
     return true;
   }
   
