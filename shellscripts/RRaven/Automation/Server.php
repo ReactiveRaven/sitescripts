@@ -147,7 +147,7 @@ class Server
   {
     foreach ($this->packages as $verb => $packagelist)
     {
-      shell_exec("apt-get " . $verb . " " . implode(" ", $packagelist));
+      shell_exec("apt-get -y " . $verb . " " . implode(" ", $packagelist));
     }
     
     foreach ($this->getRepos() as $repo /* @var $repo Repository */)
@@ -160,7 +160,7 @@ class Server
   {
     foreach ($this->packages as $verb => $packagelist)
     {
-      shell_exec("apt-get " . $verb . " " . implode(" ", $packagelist));
+      shell_exec("apt-get -y " . $verb . " " . implode(" ", $packagelist));
     }
     
     if (!file_exists($this->getCheckoutPath()))
