@@ -11,6 +11,7 @@ class Server
   private $vars = array();
   private $repos = array();
   private $settings = array();
+  private $packages = array();
   
   public function __construct($settings)
   {
@@ -25,6 +26,11 @@ class Server
     if (isset($settings["repos"]))
     {
       $this->repos = $settings["repos"];
+    }
+    
+    if (isset($settings["packages"]))
+    {
+      $this->packages = $settings["packages"];
     }
     
     if (isset($settings["settings"]))
@@ -139,6 +145,11 @@ class Server
   
   public function update()
   {
+    foreach ($this->packages as $verb => $packagelist)
+    {
+      shell_exec("apt-get " . $verb . " " . implode(" ", $packagelist));
+    }
+    
     foreach ($this->getRepos() as $repo /* @var $repo Repository */)
     {
       $repo->update();
@@ -147,6 +158,11 @@ class Server
   
   public function install()
   {
+    foreach ($this->packages as $verb => $packagelist)
+    {
+      shell_exec("apt-get " . $verb . " " . implode(" ", $packagelist));
+    }
+    
     if (!file_exists($this->getCheckoutPath()))
     {
       $this->createDirectory($this->getCheckoutPath());
