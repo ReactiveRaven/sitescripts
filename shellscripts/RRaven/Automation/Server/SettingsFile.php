@@ -27,7 +27,7 @@ class SettingsFile
     {
       $settings = json_decode(file_get_contents($filename), true);
     }
-    catch (Exception $e) 
+    catch (\Exception $e) 
     {
       throw new \Exception("Cannot parse json from '" . $filename . "'");
       $e = $e;
